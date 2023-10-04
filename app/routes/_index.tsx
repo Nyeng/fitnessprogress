@@ -18,22 +18,12 @@ export const loader = async () => {
 
 
 export default function Index() {
-  const { workouts } = useLoaderData<{ workouts: Workout[] }>();
   return (
     <><div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>Welcome to your workout plan!</h1>
       <p>Here you can find your current training program and also more information about the workouts available.</p>
-    </div><div id="workouts">
-        <h2>Workouts</h2>
-        <ul>
-          {workouts.map((workout) => (
-            <li key={workout.id}>
-              <Link to={`/workouts/${workout.id}`}>{workout.name}</Link>
-              <p style={{ color: "green" }}>{workout.description}</p>
-            </li>
-          ))}
-        </ul>
-      </div></>
+      <p>Todo: Make this the register user page etc / start site</p>
+    </div></>
   );
 
 }
