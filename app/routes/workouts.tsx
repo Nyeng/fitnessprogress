@@ -15,12 +15,14 @@ export default function App() {
     const { workouts } = useLoaderData<{ workouts: Workout[] }>();
 
     return (
-        <div id="workouts">
-            <h2>Workouts</h2>
-            <ul>
+
+        // <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+
+        <div className="bg-gray-200 p-4 rounded-lg shadow-md" >
+            <ul className="flex-col max-h-40 sm:max-h-24 md:max-h-40 overflow-y-auto">
                 {workouts.map((workout) => (
                     <li key={workout.id}>
-                        <Link to={`/workouts/${workout.id}`}>{workout.name}</Link>
+                        <Link to={`/workouts/${workout.id}`} className="text-black hover:text-gray-500 cursor-pointer">{workout.name}</Link>
                     </li>
                 ))}
             </ul>

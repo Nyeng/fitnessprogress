@@ -1,6 +1,4 @@
 import { MetaFunction, json } from "@vercel/remix";
-import { Link, useLoaderData } from "@remix-run/react";
-import { Workout } from "~/domain/workout";
 import { getWorkouts } from "~/data/workouts";
 
 export const meta: MetaFunction = () => {

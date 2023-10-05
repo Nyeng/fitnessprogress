@@ -17,8 +17,6 @@ export const loader = async ({
 
     const workout = await getWorkout(params.workoutId);
 
-    console.log(workout?.name)
-    console.log(workout?.type)
     if (!workout) {
         throw new Response("Not Found", { status: 404 });
     }
@@ -32,10 +30,9 @@ export default function CustomWorkout() {
     const { workout } = useLoaderData<{ workout: Workout }>();
 
     return (
-        <div>
-            <h1>{workout.name}</h1>
-            <p>Type: {workout.type}</p>
-            <p>Description: {workout.description}</p>
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+            <p className="text-lg mb-2">{workout.type}</p>
+            <p className="text-gray-700">{workout.description}</p>
         </div>
     );
 };
