@@ -9,21 +9,9 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { Analytics } from "@vercel/analytics/react";
-import { json } from "@vercel/remix";
-import { getWorkouts } from "./data/workouts";
-import { Workout } from "./domain/workout";
-
-
-export const loader = async () => {
-  const workouts = await getWorkouts();
-  var data = json({ workouts });
-  return data
-};
-
-
+import Menu from "./menu";
 
 export default function App() {
-  const { workouts } = useLoaderData<{ workouts: Workout[] }>();
 
   return (
     <html lang="en">
@@ -34,16 +22,8 @@ export default function App() {
         <Links />
       </head>
       <body>
-      <div id="workouts">
-        <h2>Workouts</h2>
-        <ul>
-          {workouts.map((workout) => (
-            <li key={workout.id}>
-              <Link to={`/workouts/${workout.id}`}>{workout.name}</Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+        <Menu />
+
         <Outlet />
         <ScrollRestoration />
         <Scripts />

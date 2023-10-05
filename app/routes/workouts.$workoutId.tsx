@@ -1,7 +1,7 @@
 import invariant from "tiny-invariant";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { getWorkout } from "~/data/workouts";
-import { useLoaderData } from "@remix-run/react";
+import { Outlet, useLoaderData } from "@remix-run/react";
 import { Workout } from "~/domain/workout";
 
 
@@ -19,7 +19,7 @@ export const loader = async ({
 
     console.log(workout?.name)
     console.log(workout?.type)
-    if(!workout) {
+    if (!workout) {
         throw new Response("Not Found", { status: 404 });
     }
 
@@ -29,14 +29,10 @@ export const loader = async ({
 
 
 export default function CustomWorkout() {
-    const { workout } = useLoaderData<{workout: Workout}>();
-
-    if (!workout) {
-        return <div>Loading...</div>;
-      }
+    const { workout } = useLoaderData<{ workout: Workout }>();
 
     return (
-        <div id="workout">
+        <div>
             <h1>{workout.name}</h1>
             <p>Type: {workout.type}</p>
             <p>Description: {workout.description}</p>
