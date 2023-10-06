@@ -1,4 +1,4 @@
-import { MetaFunction, json } from "@vercel/remix";
+import { MetaFunction, json } from "@remix-run/node";
 import { getWorkouts } from "~/data/workouts";
 
 export const meta: MetaFunction = () => {
@@ -14,13 +14,11 @@ export const loader = async () => {
   return data
 };
 
-
 export default function Index() {
   return (
     <><div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>Welcome to your workout plan!</h1>
       <p>Here you can find your current training program and also more information about the workouts available.</p>
-      <p>Todo: Make this the register user page etc / start site</p>
     </div></>
   );
 
