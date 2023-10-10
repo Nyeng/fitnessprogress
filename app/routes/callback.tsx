@@ -61,5 +61,8 @@ export default function Callback() {
         );
     } else {
         return <p>Hello {name.firstname} - Welcome to Fitness progress</p>;
+
+
+        
     }
 }
