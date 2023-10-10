@@ -12,14 +12,19 @@ export const loader: LoaderFunction = async () => {
 }
 
 export default function Login() {
-    // Why are these never set? They turn out undefined
-    const { environment, client_id } = useLoaderData<{ environment: string, client_id: string }>();
+    const { client_id } = useLoaderData<{ environment: string, client_id: string }>();
+
+    let environment = process.env.ENVIRONMENT;
+    if (process.env.VERCEL_ENV) {
+        environment = process.env.VERCEL_ENV;
+    }
 
     if (environment === '' || client_id === '') {
         throw new Error("Missing environment parameters for either ENVIRONMENT or CLIENT_ID");
     }
 
-    var base_url = environment === "Production" ? "https://www.fitnessprogress.run/" : "http://localhost:3000";
+    const base_url = environment === "Production" ? "https://www.fitnessprogress.run/" : "http://localhost:3000";
+    console.log(base_url)
 
     const authorizationUrl = `https://www.strava.com/oauth/authorize?client_id=${client_id}&response_type=code&redirect_uri=${base_url}/callback&approval_prompt=auto&scope=read_all,activity:read_all`;
 
