@@ -8,16 +8,17 @@ export const loader: LoaderFunction = async () => {
         throw new Error("Missing CLIENT_ID environment variable");
     }
 
-    return { client_id: process.env.CLIENT_ID, vercel_environment: process.env.VERCEL_ENV };
+    return { client_id: process.env.CLIENT_ID, vercel_environment: process.env.VERCEL_ENV, vercel_url: process.env.VERCEL_URL };
 }
 
 export default function Login() {
-    const { client_id, vercel_environment } = useLoaderData<{ client_id: string, vercel_environment: string }>();
+    const { client_id, vercel_environment, vercel_url } = useLoaderData<{ client_id: string, vercel_environment: string, vercel_url: string }>();
 
     let base_url = "http://localhost:3000";
 
     if (vercel_environment) {
-        base_url = vercel_environment;
+        base_url = 'https://' + vercel_url;
+        console.log("Baseurl", base_url)
     }
 
     console.log("Baseurl", base_url)
