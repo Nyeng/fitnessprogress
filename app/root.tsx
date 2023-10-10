@@ -48,7 +48,7 @@ export function ErrorBoundary() {
             className="w-1/2 mb-4 md:w-1/4 animate-pulse"
           />
           <h1 className="text-xl font-bold animate-bounce md:text-2xl md:font-extrabold md:animate-pulse">
-            Oh no! Something bad happened. Contact Vegard and ask why this occurred.
+            Oh no! Something bad happened. Contact Vegard to let him know.
           </h1>
         </div>
 
