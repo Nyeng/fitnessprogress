@@ -3,10 +3,7 @@ import { useState } from "react";
 
 
 export default function LastWorkout() {
-
-    // Sets initial state to not expanded
     const [isExpanded, setIsExpanded] = useState(false);
-    console.log(isExpanded)
 
     const handleExpandClick = () => {
         setIsExpanded(prevState => !prevState); // Toggle isExpanded between true and false

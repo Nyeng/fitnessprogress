@@ -1,15 +1,9 @@
 //Handle callback given in strava.tsx
-//Console log the url parames that are returned
-//
-
-
 import { LoaderFunction, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { URLSearchParams } from "url";
 
 export const loader: LoaderFunction = async ({ request }) => {
-    console.log("URL:", request.url);
-
     const urlParams = new URLSearchParams(request.url.split("?")[1]);
     const code = urlParams.get("code");
 
@@ -21,9 +15,13 @@ export const loader: LoaderFunction = async ({ request }) => {
         throw new Error("Missing code parameter");
     }
 
+    if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET) {
+        throw new Error("Missing CLIENT_ID or CLIENT_SECRET environment variable");
+    }
+
     const params = new URLSearchParams({
-        client_id: process.env.CLIENT_ID || '',
-        client_secret: process.env.CLIENT_SECRET || '',
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
         code: code,
         grant_type: "authorization_code"
     });
@@ -37,7 +35,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
 
     const data = await response.json();
-    console.log("access_token:", data.access_token);
 
     const user_data = await fetch("https://www.strava.com/api/v3/athlete", {
         method: "GET",
@@ -47,9 +44,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
 
     const userdata_json = await user_data.json();
-
-    console.log("user data:", userdata_json);
-    console.log("first name", userdata_json.firstname);
     const name = userdata_json.firstname;
     return name ? json({ firstname: name }) : json({ firstname: "unknown" });
 };
@@ -57,9 +51,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Callback() {
 
-    console.log("debug2")
     const name = useLoaderData<{ firstname: string }>();
-    console.log("firstname debug in function callback", name)
 
     if (!name) {
         return (

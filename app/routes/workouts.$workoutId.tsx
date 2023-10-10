@@ -9,7 +9,6 @@ import { Workout } from "~/domain/workout";
 export const loader = async ({
     params,
 }: LoaderFunctionArgs) => {
-    console.log(params.workoutId)
     invariant(params.workoutId, "Missing workoutId param from url(?)");
     if (!params.workoutId) {
         throw new Response("Not Found", { status: 404 });
