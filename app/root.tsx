@@ -40,20 +40,18 @@ export function ErrorBoundary() {
         <Links />
       </head>
       <body>
-      <Menu />
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-          <img src="https://cataas.com/cat/sad" alt="Sad cat" />
-          <div className="flex justify-center items-center h-screen">
-            <img
-              src="https://cataas.com/cat/sad"
-              alt="Sad cat"
-              className="w-1/2 animate-pulse"
-            />
-            <h1 className="text-3xl font-bold ml-4 animate-bounce">
-              Oh no! Something bad happened. Contact Vegard and ask why this occured
-            </h1>
-          </div>
+        <Menu />
+        <div className="flex flex-col items-center justify-center h-screen">
+          <img
+            src="https://cataas.com/cat/sad"
+            alt="Sad cat"
+            className="w-1/2 mb-4 md:w-1/4 animate-pulse"
+          />
+          <h1 className="text-xl font-bold animate-bounce md:text-2xl md:font-extrabold md:animate-pulse">
+            Oh no! Something bad happened. Contact Vegard and ask why this occurred.
+          </h1>
         </div>
+
       </body>
     </html>
   );
