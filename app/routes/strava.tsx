@@ -17,7 +17,8 @@ export default function Login() {
     let base_url = "http://localhost:3000";
 
     if (vercel_environment) {
-        base_url = 'https://' + vercel_url;
+        // Hard coded for now until I figure out how to handle redirect from "https://fitnessprogress-hedpi7044-nyeng.vercel.app"
+        base_url = 'https://www.fitnessprogress.run/';
         console.log("Baseurl", base_url)
     }
 
