@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-
-
 export default function LastWorkout() {
     const [isExpanded, setIsExpanded] = useState(false);
 

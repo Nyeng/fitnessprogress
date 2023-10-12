@@ -17,11 +17,9 @@ export default function App() {
 
     return (
         <>
-            {/* could you add some different colors to this one? */}
-            <div className="bg-yellow-50 p-4 rounded-lg shadow-md" >
-                <LastWorkout />
-            </div>
+    
             <div className="bg-gray-200 p-4 rounded-lg shadow-md" >
+                <h1 className="text-2xl font-bold">Workouts</h1>
                 <ul className="overflow-y-auto">
                     {workouts.map((workout) => (
                         <li key={workout.id}>
