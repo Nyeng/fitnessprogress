@@ -17,9 +17,8 @@ export default function App() {
 
     return (
         <>
-    
             <div className="bg-gray-200 p-4 rounded-lg shadow-md" >
-                <h1 className="text-2xl font-bold">Workouts</h1>
+                <h2 className="text-2xl">Workouts</h2>
                 <ul className="overflow-y-auto">
                     {workouts.map((workout) => (
                         <li key={workout.id}>
