@@ -28,12 +28,23 @@ export const loader = async ({
 export default function CustomWorkout() {
     const { workout } = useLoaderData<{ workout: Workout }>();
 
+    const typeMapper: Record<string, string> = {
+        "strength": "💪",
+        "speed": "🏃‍♂️",
+        "threshold": "🏃‍♂️",
+        "interval": "🏃‍♂️",
+        "endurance": " 🏃‍♂️",
+        "recovery": "🏃‍♂️"
+        // add more types here as needed
+    };
+
     return (
         <div className="bg-gray-100 p-4 rounded-lg shadow-md">
-            <h2 className="text-lg mb-2">{workout.name}</h2>
-            <h3 className="text-lg mb-2">{workout.type}</h3>
+            <h2 className="text-lg mb-2">{workout.name} {typeMapper[workout.type]}</h2>
             <p className="text-gray-700">{workout.description}</p>
         </div>
+
+
     );
 };
 
