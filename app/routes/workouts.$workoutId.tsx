@@ -29,11 +29,11 @@ export default function CustomWorkout() {
     const { workout } = useLoaderData<{ workout: Workout }>();
 
     return (
-        <><div className="bg-gray-100 p-4 rounded-lg shadow-md">
-            <p className="text-lg mb-2">{workout.type}</p>
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+            <h2 className="text-lg mb-2">{workout.name}</h2>
+            <h3 className="text-lg mb-2">{workout.type}</h3>
             <p className="text-gray-700">{workout.description}</p>
-        </div></>
-
+        </div>
     );
 };
 

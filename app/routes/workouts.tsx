@@ -36,11 +36,12 @@ export default function App() {
                         <div className="origin-top-right relative right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 left-1/2 transform -translate-x-1/2">
                             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                                 {workouts.map((workout) => (
-                                    <Link key={workout.id} to={`/workouts/${workout.id}`} prefetch="viewport" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">{workout.name}</Link>
+                                    <Link key={workout.id} to={`/workouts/${workout.id}`} prefetch="viewport" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" onClick={() => setShowMenu(false)}>{workout.name}</Link>
                                 ))}
                             </div>
                         </div>
                     )}
+
                 </div>
             </div>
             <Outlet />
