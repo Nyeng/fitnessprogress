@@ -1,21 +1,40 @@
-import { json } from "@remix-run/node";
+import { LoaderFunction, json } from "@remix-run/node";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { getWorkouts } from "~/data/workouts";
 import { Workout } from "~/domain/workout";
 import LastWorkout from "./workouts.lastworkout";
 import { useState } from "react";
+import { getSession } from "~/sessions";
 
-export const loader = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+    //Create logic to handle initial session setup?
+    const session = await getSession(
+        request.headers.get("Cookie")
+    );
+    
+
+    const activitiesResponse = await fetch("https://www.strava.com/api/v3/activities/10055422088", {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${session.data.access_token}`
+        }
+    });
+
+    console.log("token: ", session.data.access_token)
+    const activities = await activitiesResponse.json();
+    console.log(activities);
+
     const workouts = await getWorkouts();
     var data = json({ workouts });
+
+    // todo: return activities here instead of data
     return data
 };
 
-
-
 export default function App() {
-
     const { workouts } = useLoaderData<{ workouts: Workout[] }>();
+    //Create logic to handle initial session setup?
+
     const [showMenu, setShowMenu] = useState(false);
 
     return (

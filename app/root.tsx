@@ -26,14 +26,17 @@ export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(
     request.headers.get("Cookie")
   );
-  console.log("userId from root.tsx: ", session.data.userId)
+  console.log("userId from root.tsx: ", session.data.access_token)
   var userId = session.data.userId;
+
+  // 
 
   if (!process.env.CLIENT_ID) {
     throw new Error("Missing CLIENT_ID environment variable");
   }
 
-  return { client_id: process.env.CLIENT_ID, vercel_environment: process.env.VERCEL_ENV, vercel_url: process.env.VERCEL_URL, user_id: userId };
+
+  return { client_id: process.env.CLIENT_ID, vercel_environment: process.env.VERCEL_ENV, vercel_url: process.env.VERCEL_URL, user_id: userId, access_token: session.data.access_token };
 }
 
 

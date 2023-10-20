@@ -1,6 +1,11 @@
+import { LoaderFunction } from "@remix-run/node";
 import { useState } from "react";
+import { getSession } from "~/sessions";
+
 
 export default function LastWorkout() {
+    
+
     const [isExpanded, setIsExpanded] = useState(false);
 
     const handleExpandClick = () => {
