@@ -6,7 +6,6 @@ import { getSession, commitSession } from "~/sessions";
 
 
 export const loader: LoaderFunction = async ({ request }) => {
-
     const urlParams = new URLSearchParams(request.url.split("?")[1]);
     const code = urlParams.get("code");
 
@@ -16,8 +15,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     );
 
     if (session.has("userId")) {
-        // Redirect to the home page if they are already signed in.
-        console.log("found user id")
+        // User logged in already
         return redirect("/");
     }
 
@@ -53,25 +51,16 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     if (response.status == 200) {
         //Store session
-        console.log("User successfully logged in - updating session")
         user_response_data = await response.json();
-        console.log("user respone data", user_response_data)
         user_id = user_response_data.athlete.username;
-
-        console.log("User_id", user_id)
         session.set("userId", user_id);
-        console.log("Does session have userid now after getting set?",session.has("userId"))
         await commitSession(session)
     }
 
     else {
-        console.log("Unsuccessfull login")
         session.flash("error", "Invalid login");
         await commitSession(session)
     }
-
-    console.log("session data returned for user", session.data)
-    console.log("Last loging session of session.has(userId) before committing",session.has("userId"))
 
     return redirect("/", {
         headers: {

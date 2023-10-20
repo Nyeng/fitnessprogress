@@ -26,10 +26,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(
     request.headers.get("Cookie")
   );
+  console.log("has userId?", session.has("userId")) 
+  console.log("userId: ", session.data.userId)
   
-  console.log("has userId?", session.has("userId"))
-
- 
 
   if (!process.env.CLIENT_ID) {
     throw new Error("Missing CLIENT_ID environment variable");
