@@ -18,7 +18,7 @@ const { getSession, commitSession, destroySession } =
 
         // all of these are optional
         // httpOnly: true,
-        maxAge: 60,
+        maxAge: 604_800, //one week
         sameSite: false,
         // secrets: ["s3cret1"],
         secure: process.env.NODE_ENV === "production"

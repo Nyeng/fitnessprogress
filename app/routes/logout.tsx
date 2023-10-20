@@ -17,6 +17,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 
 export default function Logout(){
+    // handle logout stuff
+    // Create some animated stuff here
 
-    
+    return redirect("/")
 }
