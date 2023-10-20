@@ -11,6 +11,7 @@ import Menu from "./menu";
 import stylesheet from "~/tailwind.css";
 import { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { createElement } from "react";
+import { getSession } from "./sessions";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -19,10 +20,19 @@ export const links: LinksFunction = () => [
 const isClient = typeof document !== "undefined";
 
 //First things first: load the environment variables
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+
+  //Create logic to handle initial session setup?
+  const session = await getSession(
+    request.headers.get("Cookie")
+  );
+  
+  console.log("has userId?", session.has("userId"))
+
+ 
 
   if (!process.env.CLIENT_ID) {
-      throw new Error("Missing CLIENT_ID environment variable");
+    throw new Error("Missing CLIENT_ID environment variable");
   }
 
   return { client_id: process.env.CLIENT_ID, vercel_environment: process.env.VERCEL_ENV, vercel_url: process.env.VERCEL_URL };

@@ -1,13 +1,27 @@
 //Handle callback given in strava.tsx
-import { LoaderFunction, json } from "@remix-run/node";
+import { LoaderFunction, json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { URLSearchParams } from "url";
+import { getSession, commitSession } from "~/sessions";
+
 
 export const loader: LoaderFunction = async ({ request }) => {
+
     const urlParams = new URLSearchParams(request.url.split("?")[1]);
     const code = urlParams.get("code");
 
-    // todo: create logic here to handle wrong scope, and also move this logic to a separate class / file
+    // prepare session
+    const session = await getSession(
+        request.headers.get("Cookie")
+    );
+
+    if (session.has("userId")) {
+        // Redirect to the home page if they are already signed in.
+        console.log("found user id")
+        return redirect("/");
+    }
+
+    // Todo: handle scopes
     const scope = urlParams.get("scope");
     const state = urlParams.get("state");
 
@@ -34,35 +48,52 @@ export const loader: LoaderFunction = async ({ request }) => {
         body: params
     });
 
-    const data = await response.json();
+    let user_response_data;
+    let user_id;
 
-    const user_data = await fetch("https://www.strava.com/api/v3/athlete", {
-        method: "GET",
+    if (response.status == 200) {
+        //Store session
+        console.log("User successfully logged in - updating session")
+        user_response_data = await response.json();
+        console.log("user respone data", user_response_data)
+        user_id = user_response_data.athlete.username;
+
+        console.log("User_id", user_id)
+        session.set("userId", user_id);
+        console.log("Does session have userid now after getting set?",session.has("userId"))
+        await commitSession(session)
+    }
+
+    else {
+        console.log("Unsuccessfull login")
+        session.flash("error", "Invalid login");
+        await commitSession(session)
+    }
+
+    console.log("session data returned for user", session.data)
+    console.log("Last loging session of session.has(userId) before committing",session.has("userId"))
+
+    return redirect("/", {
         headers: {
-            "Authorization": `Bearer ${data.access_token}`
-        }
+            "Set-Cookie": await commitSession(session),
+        },
     });
-
-    const userdata_json = await user_data.json();
-    const name = userdata_json.firstname;
-    return name ? json({ firstname: name }) : json({ firstname: "unknown" });
 };
 
 
 export default function Callback() {
 
-    const name = useLoaderData<{ firstname: string }>();
+    const user_data = useLoaderData<{ userdata_json: JSON }>();
+    console.log("userdata json:", user_data.userdata_json)
+    console.log("headers", user_data.userdata_json)
 
-    if (!name) {
+    if (!user_data) {
         return (
             <div>
                 <p>Loading...</p>
             </div>
         );
     } else {
-        return <p>Hello {name.firstname} - Welcome to Fitness progress</p>;
-
-
-        
+        return <p>Hello user - Welcome to Fitness progress</p>;
     }
 }
