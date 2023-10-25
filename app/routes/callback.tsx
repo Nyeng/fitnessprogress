@@ -2,7 +2,7 @@
 import { LoaderFunction, json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { URLSearchParams } from "url";
-import { getSession, commitSession } from "~/sessions";
+import { getSession, commitSession } from "~/authhandling/sessions";
 
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -57,8 +57,6 @@ export const loader: LoaderFunction = async ({ request }) => {
         session.set("access_token",user_response_data.access_token)
         session.set("refresh_token",user_response_data.refresh_token)
         session.set("expires_at",user_response_data.expires_at)
-
-        console.log(user_response_data.expires_at)
     }
 
     else {
