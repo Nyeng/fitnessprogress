@@ -1,6 +1,4 @@
-import { SessionData, redirect } from "@remix-run/node";
-
-
+import { SessionData } from "@remix-run/node";
 
 export async function isTokenExpired(session: SessionData) {
     const currentTime = Math.floor(Date.now() / 1000); // current time in seconds
@@ -31,4 +29,31 @@ export async function refreshAccessToken(session: SessionData) {
         console.error("Failed to refresh token");
         throw new Error("Token refresh failed");
     }
+}
+
+export async function fetchAccessToken(code: string): Promise<Response> {
+    if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET) {
+        throw new Error("Missing CLIENT_ID or CLIENT_SECRET environment variable");
+    }
+
+    const params = new URLSearchParams({
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+        code: code,
+        grant_type: "authorization_code"
+    });
+
+    const response = await fetch("https://www.strava.com/api/v3/oauth/token", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params
+    });
+
+    if (response.status !== 200) {
+        throw new Error("Failed to fetch access token");
+    }
+
+    return response;
 }

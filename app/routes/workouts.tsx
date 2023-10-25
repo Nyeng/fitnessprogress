@@ -19,7 +19,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
 
     const activities = await activitiesResponse.json();
-    console.log(activities);
+    //console.log(activities);
 
     const workouts = await getWorkouts();
     var data = json({ workouts });
