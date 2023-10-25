@@ -31,11 +31,10 @@ export default function CustomWorkout() {
     const typeMapper: Record<string, string> = {
         "strength": "💪",
         "speed": "🏃‍♂️",
-        "threshold": "🏃‍♂️",
+        "threshold": "🏋️‍♂️",
         "interval": "🏃‍♂️",
-        "endurance": " 🏃‍♂️",
-        "recovery": "🏃‍♂️"
-        // add more types here as needed
+        "endurance": "🚴‍♂️",
+        "recovery": "🧘‍♂️"
     };
 
     return (
@@ -43,8 +42,6 @@ export default function CustomWorkout() {
             <h2 className="text-lg mb-2">{workout.name} {typeMapper[workout.type]}</h2>
             <p className="text-gray-700">{workout.description}</p>
         </div>
-
-
     );
 };
 

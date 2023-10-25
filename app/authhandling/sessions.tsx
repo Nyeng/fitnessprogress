@@ -1,11 +1,11 @@
 // app/sessions.ts
 import { createCookieSessionStorage } from "@remix-run/node"; // or cloudflare/deno
 
-type SessionData = {
-  userId: string;
-  access_token: string;
-  refresh_token: string;
-  expires_at: string;
+export type SessionData = {
+  userId?: string;
+  access_token?: string;
+  refresh_token?: string;
+  expires_at?: number;
 };
 
 type SessionFlashData = {

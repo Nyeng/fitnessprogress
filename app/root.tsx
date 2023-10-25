@@ -9,9 +9,10 @@ import {
 import { Analytics } from "@vercel/analytics/react";
 import Menu from "./menu";
 import stylesheet from "~/tailwind.css";
-import { LinksFunction, LoaderFunction } from "@remix-run/node";
+import { LinksFunction, LoaderFunction, redirect } from "@remix-run/node";
 import { createElement } from "react";
-import { getSession } from "./sessions";
+import { commitSession, getSession } from "./authhandling/sessions";
+import { isTokenExpired, refreshAccessToken } from "./authhandling/TokenHandler";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -19,27 +20,35 @@ export const links: LinksFunction = () => [
 
 const isClient = typeof document !== "undefined";
 
-//First things first: load the environment variables
 export const loader: LoaderFunction = async ({ request }) => {
 
-  //Create logic to handle initial session setup?
-  const session = await getSession(
+  let session = await getSession(
     request.headers.get("Cookie")
   );
-  console.log("userId from root.tsx: ", session.data.access_token)
-  var userId = session.data.userId;
 
-  // 
+  if (await isTokenExpired(session)) {
+    try {
+      await refreshAccessToken(session);
+      return redirect("/", {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+      session.flash("error", "Session expired. Please log in again.");
+    }
 
-  if (!process.env.CLIENT_ID) {
-    throw new Error("Missing CLIENT_ID environment variable");
+    if (!process.env.CLIENT_ID) {
+      throw new Error("Missing CLIENT_ID environment variable");
+    }
+
   }
-
-
-  return { client_id: process.env.CLIENT_ID, vercel_environment: process.env.VERCEL_ENV, vercel_url: process.env.VERCEL_URL, user_id: userId, access_token: session.data.access_token };
+  return { client_id: process.env.CLIENT_ID, vercel_environment: process.env.VERCEL_ENV, vercel_url: process.env.VERCEL_URL, user_id: session.data.userId, access_token: session.data.access_token };
 }
 
 
+// Todo, move this out of root to clean up
 export function ErrorBoundary() {
   if (isClient) {
     return createElement("html", {

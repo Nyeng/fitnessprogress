@@ -1,6 +1,6 @@
 import { LoaderFunction } from "@remix-run/node";
 import { useState } from "react";
-import { getSession } from "~/sessions";
+import { getSession } from "~/authhandling/sessions";
 
 
 export default function LastWorkout() {

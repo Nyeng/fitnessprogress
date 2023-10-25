@@ -4,14 +4,12 @@ import { getWorkouts } from "~/data/workouts";
 import { Workout } from "~/domain/workout";
 import LastWorkout from "./workouts.lastworkout";
 import { useState } from "react";
-import { getSession } from "~/sessions";
+import { getSession } from "~/authhandling/sessions";
 
 export const loader: LoaderFunction = async ({ request }) => {
-    //Create logic to handle initial session setup?
     const session = await getSession(
         request.headers.get("Cookie")
     );
-    
 
     const activitiesResponse = await fetch("https://www.strava.com/api/v3/activities/10055422088", {
         method: "GET",
@@ -20,9 +18,8 @@ export const loader: LoaderFunction = async ({ request }) => {
         }
     });
 
-    console.log("token: ", session.data.access_token)
     const activities = await activitiesResponse.json();
-    console.log(activities);
+    //console.log(activities);
 
     const workouts = await getWorkouts();
     var data = json({ workouts });
