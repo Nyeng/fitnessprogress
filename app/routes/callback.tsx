@@ -54,7 +54,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 
-export default function Callback() {
+export default function Profilepage() {
     const user_data = useLoaderData<{ userdata_json: JSON }>();
 
     if (!user_data) {
