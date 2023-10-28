@@ -1,7 +1,7 @@
 import invariant from "tiny-invariant";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { getWorkout } from "~/data/workouts";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { Workout } from "~/domain/workout";
 
 
@@ -21,9 +21,7 @@ export const loader = async ({
     }
 
     return json({ workout });
-
 }
-
 
 export default function CustomWorkout() {
     const { workout } = useLoaderData<{ workout: Workout }>();
@@ -38,7 +36,7 @@ export default function CustomWorkout() {
     };
 
     return (
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+        <div>
             <h2 className="text-lg mb-2">{workout.name} {typeMapper[workout.type]}</h2>
             <p className="text-gray-700">{workout.description}</p>
         </div>

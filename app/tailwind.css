@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    div {
+        @apply rounded-lg shadow-lg shadow-indigo-500/40 p-4 m-4 font-serif text-sm;
+    }
+
+    nav {
+        /* background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8f00ff); */
+    }
+
+    nav a {
+        @apply text-white no-underline ml-4;
+    }
+
+    nav a:hover {
+        @apply underline;
+    }
+
+    table {
+        @apply border-collapse border border-gray-400;
+    }
+
+    th {
+        @apply bg-gray-200 border border-gray-400 p-2 font-bold text-gray-700;
+    }
+
+    td {
+        @apply border border-gray-400 p-2 text-gray-700;
+    }
+}
+
+
