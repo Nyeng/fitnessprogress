@@ -1,5 +1,5 @@
 
-export default async function GetFromStrava(endpoint: string, access_token?: string) {
+export default async function GetFromStrava(endpoint: string, access_token?: string): Promise<string> {
     if (!access_token) {
         throw new Error("Access token is undefined");
     }
@@ -9,10 +9,13 @@ export default async function GetFromStrava(endpoint: string, access_token?: str
         headers: {
             "Authorization": `Bearer ${access_token}`
         }
-    });
-
-    if (activitiesResponse.ok){
-        return activitiesResponse.json()
-    }
-    throw new Error("Unable to fetch response from Strava")
+    }).then((response) => {
+        if (response.status != 200) {
+            throw new Error("Unable to return response from Strava")
+        }
+        else {
+            return response.json()
+        }
+    })
+    return activitiesResponse;
 }

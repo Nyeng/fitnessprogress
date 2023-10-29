@@ -1,6 +1,5 @@
 import { LoaderFunction, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { useState } from "react";
 import { getSession } from "~/authhandling/sessions";
 import GetFromStrava from "~/data/strava_api";
 
@@ -8,20 +7,26 @@ export const loader: LoaderFunction = async ({ request }) => {
     const session = await getSession(
         request.headers.get("Cookie")
     );
-    const activitiesResponse = await GetFromStrava("activities/10055422088", session.data.access_token)
-    return activitiesResponse;
+    const activitiesResponse = await GetFromStrava("activities/10123221063", session.data.access_token)
+    return json({ activity: activitiesResponse });
+
 };
 
+
 export default function Training() {
-    const { activities } = useLoaderData<{ activities: JSON }>();
-    console.log(JSON.stringify(activities))
+    //const data = useLoaderData<typeof loader>();
+    const { activity } = useLoaderData<{ activity: Activity }>();
+    console.log(activity.id)
+
     return (
+
         <>
-            {/* Add shadow and margin to this div */}
             <div>
-                <h1>Here comes your training man</h1>
-                <p>Let's see how this layout works out</p>
-                <p>{JSON.stringify(activities)}</p>
+                <h2>Last workout</h2>
+                <p>Distance covered for your activity: <span> {activity.distance} meter </span></p>
+                <p></p>
+                <p className="p-2 italic">{activity.description}</p>
+
             </div>
             <Outlet />
         </>
