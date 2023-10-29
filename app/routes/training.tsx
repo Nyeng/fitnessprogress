@@ -17,7 +17,7 @@ export default function Training() {
     //const data = useLoaderData<typeof loader>();
     const { activity } = useLoaderData<{ activity: Activity }>();
     console.log(activity.id)
-
+    
     return (
 
         <>

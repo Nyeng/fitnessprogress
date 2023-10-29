@@ -15,7 +15,7 @@ export default function Menu({ }: {}) {
                 <Link to="/" className="ml-auto text-2xl font-bold text-orange-300 border-white">
                     Fitprog
                 </Link>
-                <Link to="/training/lastworkout/plan" prefetch="render">
+                <Link to="/training/" prefetch="render">
                     Training
                 </Link>
                 <Link to="/workouts">
