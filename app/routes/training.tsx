@@ -14,19 +14,21 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 
 export default function Training() {
-    //const data = useLoaderData<typeof loader>();
     const { activity } = useLoaderData<{ activity: Activity }>();
     console.log(activity.id)
-    
-    return (
 
+    const activityType: Record<string, string> = {
+        "strength": "💪",
+        "Run": "🏃‍♂️",
+    };
+
+    return (
         <>
             <div>
-                <h2>Last workout</h2>
-                <p>Distance covered for your activity: <span> {activity.distance} meter </span></p>
-                <p></p>
+                <h2>{activity.name} {activityType[activity.type]}</h2>
+                <p> <span> {activity.distance} meter  </span></p>
+                <p><span>{activity.average_heartrate} ❤️</span></p>
                 <p className="p-2 italic">{activity.description}</p>
-
             </div>
             <Outlet />
         </>

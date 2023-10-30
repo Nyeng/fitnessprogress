@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+
+    h2 {
+        @apply text-lg font-mono;
+    }
     div {
         @apply rounded-lg shadow-lg shadow-indigo-500/40 p-4 m-4 font-serif text-sm;
-    }
-
-    span {
-        @apply font-bold;
     }
 
     nav a {
