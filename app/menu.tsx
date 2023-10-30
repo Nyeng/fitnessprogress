@@ -26,6 +26,8 @@ export default function Menu({ }: {}) {
         </div>
     );
 
+
+            
     function LoginButton({ name, isLoggedIn }: { name: string, isLoggedIn: boolean }): JSX.Element {
         if (isLoggedIn) {
             return <Link to={"/logout"}>{name} - Logout</Link>
