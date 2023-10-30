@@ -20,7 +20,7 @@ const { getSession, commitSession, destroySession } =
         name: "__session",
 
         // all of these are optional
-        // httpOnly: true,
+        httpOnly: true,
         maxAge: 604_800, //one week
         sameSite: false,
         // secrets: ["s3cret1"],
