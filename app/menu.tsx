@@ -2,8 +2,8 @@ import { Link, useLoaderData } from "@remix-run/react";
 import strava_image from "./images/btn_strava_connectwith_orange@2x.png";
 
 
-export default function Menu({ }: {}) {
-    const loaderData = useLoaderData<{ client_id: string, vercel_environment: string, vercel_url: string, user_id: string }>();
+export default function Menu() {
+    const loaderData = useLoaderData<{ client_id: string, vercel_environment: string, vercel_url: string, username: string }>();
 
     let base_url = loaderData.vercel_environment ? "https://www.fitnessprogress.run/" : "http://localhost:3000";
 
@@ -21,7 +21,7 @@ export default function Menu({ }: {}) {
                 <Link to="/workouts">
                     Workouts
                 </Link>
-                <LoginButton name={loaderData.user_id} isLoggedIn={loaderData.user_id != undefined} />
+                <LoginButton name={loaderData.username} isLoggedIn={loaderData.username != undefined} />
             </nav>
         </div>
     );

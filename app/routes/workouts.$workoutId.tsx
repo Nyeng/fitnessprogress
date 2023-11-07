@@ -19,9 +19,6 @@ export const loader = async ({
     if (!workout) {
         throw new Response("Not Found", { status: 404 });
     }
-
-
-    console.log("Workout before passing from loader:", workout)
     return json({ workout });
 }
 

@@ -1,6 +1,8 @@
+import { redirect } from "@remix-run/node";
 
 export default async function GetFromStrava(endpoint: string, access_token?: string): Promise<string> {
     if (!access_token) {
+        redirect("/")
         throw new Error("Access token is undefined");
     }
 

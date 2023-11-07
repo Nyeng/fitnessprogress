@@ -29,6 +29,9 @@ export default function Index() {
       <p>Here you can find your current training program and also more information about the workouts available.</p>
 
       <p>By signing in via <a href="https://www.strava.com/">Strava</a>, you can create workout plans and keep track of your training progress from Strava. The app allows you to compare your current workouts to your plan and rewards you when you follow the plan.</p>
+
+      <p>When signing up you agree to have your minimal user data securely stored in our database. The data will not be shared to any third parties and will only be used </p>
+
     </div></>
   );
 }
