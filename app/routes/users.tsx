@@ -5,9 +5,14 @@ import { User } from '@prisma/client'
 
 export const loader: LoaderFunction = async () => {
     try {
+        
         const users = await prisma.user.findMany();
+
         // Map each user object to a new object with userId as a string
         const serializedUsers = users.map(({ userId, ...user }) => ({ ...user, userId: userId.toString() }));
+
+        // Disconnect the Prisma client after each request
+        prisma.$disconnect();
 
         return json({ users: serializedUsers });
     } catch (error) {
@@ -19,6 +24,10 @@ export const loader: LoaderFunction = async () => {
 export default function Users() {
 
     const { users } = useLoaderData<{ users: User[] }>();
+
+    if (!users) {
+        return <div>No users found</div>;
+    }
 
     return (
         <>
