@@ -5,16 +5,28 @@ let prisma: PrismaClient;
 declare const global: NodeJS.Global & { prisma: PrismaClient };
 
 if (process.env.NODE_ENV === "production") {
-    prisma = new PrismaClient();
-    
-if (!global.prisma) {
-    global.prisma = new PrismaClient();
-}
-prisma = global.prisma;
+    try {
+        prisma = new PrismaClient();
+    } catch (error) {
+        console.error("Failed to create Prisma client:", error);
+    }
 
+    if (!global.prisma) {
+        try {
+            global.prisma = new PrismaClient();
+        } catch (error) {
+            console.error("Failed to create global Prisma client:", error);
+        }
+    }
+
+    prisma = global.prisma;
 } else {
     if (!global.prisma) {
-        global.prisma = new PrismaClient();
+        try {
+            global.prisma = new PrismaClient();
+        } catch (error) {
+            console.error("Failed to create global Prisma client:", error);
+        }
     }
     prisma = global.prisma;
 }

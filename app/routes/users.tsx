@@ -4,12 +4,16 @@ import prisma from "prisma/client";
 import { User } from '@prisma/client'
 
 export const loader: LoaderFunction = async () => {
-    const users = await prisma.user.findMany();
+    try {
+        const users = await prisma.user.findMany();
+        // Map each user object to a new object with userId as a string
+        const serializedUsers = users.map(({ userId, ...user }) => ({ ...user, userId: userId.toString() }));
 
-    // Map each user object to a new object with userId as a string
-    const serializedUsers = users.map(({ userId, ...user }) => ({ ...user, userId: userId.toString() }));
-
-    return json({ users: serializedUsers });
+        return json({ users: serializedUsers });
+    } catch (error) {
+        console.error(error);
+        return json({ message: 'An error occurred while fetching users' }, { status: 500 });
+    }
 }
 
 export default function Users() {
@@ -22,8 +26,8 @@ export default function Users() {
             <ul>
                 {users.map(({ name, userId, createdAt }) => (
                     <>
-                        <li key={userId}>{name}</li>
-                        <li key={userId}>{createdAt}</li>
+                        <li key={`name-${userId}`}>{name}</li>
+                        <li key={`createdAt-${userId}`}>{createdAt}</li>
                     </>
                 ))}
             </ul>
