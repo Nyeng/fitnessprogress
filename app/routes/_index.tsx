@@ -16,10 +16,10 @@ export const loader = async () => {
 
 export default function Index() {
   return (
-    <><div>
+    <><><div>
       <h1>Welcome to your workout plan!</h1>
       <p>Here you can find your current training program and also more information about the workouts available.</p>
-    </div></>
+    </div></><div><p>Testbranch</p></div></>
   );
 
 }
