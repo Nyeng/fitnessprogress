@@ -10,7 +10,8 @@
     "build": "remix build",
     "dev": "remix dev --manual",
     "start": "remix-serve ./build/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.5.2",
