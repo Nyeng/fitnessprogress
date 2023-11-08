@@ -6,6 +6,7 @@ export type SessionData = {
   access_token?: string;
   refresh_token?: string;
   expires_at?: number;
+  username: string;
 };
 
 type SessionFlashData = {

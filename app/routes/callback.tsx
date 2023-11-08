@@ -1,6 +1,7 @@
 //Handle callback given in strava.tsx
-import { LoaderFunction, json, redirect } from "@remix-run/node";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import prisma from "prisma/client";
 import { URLSearchParams } from "url";
 import { fetchAccessToken } from "~/authhandling/TokenHandler";
 import { getSession, commitSession } from "~/authhandling/sessions";
@@ -17,7 +18,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     );
 
     if (session.has("userId")) {
-        // User logged in already
         return redirect("/");
     }
 
@@ -33,8 +33,26 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     if (response.status == 200) {
         var user_response_data = await response.json();
-        var user_id = user_response_data.athlete.username;
-        session.set("userId", user_id);
+        //If userid does not exist in users db, store this data to user tables using prisma
+        const user = await prisma.user.findUnique({
+            where: {
+                userId: user_response_data.athlete.id,
+            },
+        });
+
+        if (!user) {
+            await prisma.user.create({
+                data: {
+                    userId: user_response_data.athlete.id,
+                    name: user_response_data.athlete.username,
+                    accessToken: user_response_data.access_token,
+                    refreshToken: user_response_data.refresh_token,
+                    createdAt: new Date(user_response_data.expires_at * 1000),
+                },
+            });
+        }
+        session.set("username", user_response_data.athlete.username)
+        session.set("userId", user_response_data.athlete.id);
         session.set("access_token", user_response_data.access_token)
         session.set("refresh_token", user_response_data.refresh_token)
         session.set("expires_at", user_response_data.expires_at)

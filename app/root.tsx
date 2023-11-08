@@ -42,9 +42,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     if (!process.env.CLIENT_ID) {
       throw new Error("Missing CLIENT_ID environment variable");
     }
-
   }
-  return { client_id: process.env.CLIENT_ID, vercel_environment: process.env.VERCEL_ENV, vercel_url: process.env.VERCEL_URL, user_id: session.data.userId, access_token: session.data.access_token };
+  //Todo: easy recactor this into one object with values instead of passing several values
+  return { client_id: process.env.CLIENT_ID, vercel_environment: process.env.VERCEL_ENV, vercel_url: process.env.VERCEL_URL, username: session.data.username, access_token: session.data.access_token };
 }
 
 

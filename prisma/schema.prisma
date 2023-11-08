@@ -1,0 +1,21 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL") 
+}
+
+//Todo: Need to refactor and migrate this schema and add this field to the schebang: expires_at (epoch, convert to datetime or sum')
+model User {
+  userId       BigInt   @id
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  name         String?
+  accessToken  String?
+  refreshToken String?
+}

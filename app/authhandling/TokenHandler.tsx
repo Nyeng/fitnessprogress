@@ -25,6 +25,8 @@ export async function refreshAccessToken(session: SessionData) {
         session.set("access_token", data.access_token);
         session.set("refresh_token", data.refresh_token);
         session.set("expires_at", data.expires_at);
+        //Todo: should I watch out for name here as well?
+        
     } else {
         console.error("Failed to refresh token");
         throw new Error("Token refresh failed");
