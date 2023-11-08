@@ -1,3 +1,4 @@
+
 -- CreateTable
 CREATE TABLE "User" (
     "userId" BIGINT NOT NULL,
@@ -6,6 +7,5 @@ CREATE TABLE "User" (
     "name" TEXT,
     "accessToken" TEXT,
     "refreshToken" TEXT,
-
     CONSTRAINT "User_pkey" PRIMARY KEY ("userId")
 );

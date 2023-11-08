@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("POSTGRES_URL") 
 }
 
 //Todo: Need to refactor and migrate this schema and add this field to the schebang: expires_at (epoch, convert to datetime or sum')

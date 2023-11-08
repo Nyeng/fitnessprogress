@@ -1,5 +1,5 @@
 //Handle callback given in strava.tsx
-import { LoaderFunction, json, redirect } from "@remix-run/node";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import prisma from "prisma/client";
 import { URLSearchParams } from "url";
