@@ -35,10 +35,9 @@ export default function CustomWorkout() {
     };
 
     return (
-        <div>
-            <h2 className="text-lg mb-2">{workout.name} {typeMapper[workout.type]}</h2>
-            <p className="text-gray-700">{workout.description}</p>
-        </div>
+
+        <><h2 className="text-lg mb-2">{workout.name} {typeMapper[workout.type]}</h2><p className="text-gray-700">{workout.description}</p></>
+
     );
 };
 
