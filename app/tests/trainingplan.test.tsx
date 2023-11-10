@@ -1,16 +1,11 @@
 import { Workout } from "../calculations/plan";
+import { expect, test } from 'vitest'
+
+
 
 test('Create training plan', () => {
-
-    
-    
-    let workout3 = new Workout('Evening Walk', {}, 1, 1, 0.5);
-
-    console.log("name", workout3.name)
-    console.log("name", workout3.cooldownKm)
-    console.log("name", workout3.warmupMiles)
-
-
-
-
+    let workout = new Workout('Evening Walk', {}, 1, 1, 0.5);
+    expect(workout.name).toBe("Evening Walk")
+    expect(workout.cooldownKm).toBe(0.5)
 });
+
