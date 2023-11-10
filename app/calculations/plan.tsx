@@ -1,21 +1,23 @@
 export class Workout {
     constructor(builder: WorkoutBuilder) {
         this.name = builder.name;
-        this.lap = builder.lap;
+        this.lapstructure = builder.lapstructure;
         this.type = builder.type;
         this.warmupKm = builder.warmupKm;
         this.warmupMiles = builder.warmupMiles;
         this.cooldownKm = builder.cooldownKm;
         this.cooldownMiles = builder.cooldownMiles;
+        this.description = builder.description;
     }
 
     name: string;
-    lap?: Lapstructure[];
+    lapstructure?: Lapstructure[];
     type?: WorkoutType;
     warmupKm?: GLfloat;
     warmupMiles?: GLfloat;
     cooldownKm?: GLfloat;
     cooldownMiles?: GLfloat;
+    description?: string;
 }
 
 export class Lapstructure {
@@ -58,8 +60,6 @@ export class LapBuilder {
         return this;
     }
 
-
-
     build() {
         return new Lap(this);
     }
@@ -67,6 +67,10 @@ export class LapBuilder {
 
 export class Lap {
     constructor(builder: LapBuilder) {
+        this.durationSeconds = builder.durationSeconds;
+        this.breakInDistance = builder.breakInDistance;
+        this.distance = builder.distance;
+        this.breakInDistance = builder.breakInDistance;
     }
 
     durationSeconds?: number;
@@ -77,46 +81,35 @@ export class Lap {
 
 export class LapstructureBuilder {
 
-    durationSeconds?: number;
-    distance?: number;
-    breakInSeconds?: number;
-    breakInDistance?: number;
-    laps: Lap[] = [];
+    private laps: Lap[] = [];
 
     AddLaps(laps: Lap[]) {
         laps = this.laps;
         return this;
     }
 
-    AddLap(lap: Lap) {
+    AddLap(lap: Lap): LapstructureBuilder {
         this.laps.push(lap);
         return this;
-    }
+      }
 
-    AddLapXTimes(lap: Lap, times: number) {
+    // AddLapXTimes(lap: Lap, times: number) {
+    //     for (let i = 0; i < times; i++) {
+    //         this.laps.push(lap);
+    //     }
+    //     return this;
+    // }
+
+    AddLapXTimes(lapBuilder: LapBuilder, times: number): LapstructureBuilder {
         for (let i = 0; i < times; i++) {
-            this.laps.push(lap);
+          this.laps.push(lapBuilder.build());
         }
         return this;
-    }
+      }
 
-    constructor(durationSeconds: number) {
-        this.durationSeconds = durationSeconds;
-    }
-
-    setBreakInSeconds(breakInSeconds: number) {
-        this.breakInSeconds = breakInSeconds;
-        return this;
-    }
-
-    setBreakInDistance(breakInDistance: number) {
-        this.breakInDistance = breakInDistance;
-        return this;
-    }
-
-    build() {
+      build(): Lapstructure {
         return new Lapstructure(this);
-    }
+      }
 }
 
 
@@ -127,10 +120,9 @@ export enum WorkoutType {
     RACE = 'race',
 }
 
-
 export class WorkoutBuilder {
     name: string;
-    lap?: Lapstructure[];
+    lapstructure?: Lapstructure[];
     type?: WorkoutType;
     warmupKm?: GLfloat;
     warmupMiles?: GLfloat;
@@ -144,6 +136,11 @@ export class WorkoutBuilder {
 
     setType(type: WorkoutType) {
         this.type = type;
+        return this;
+    }
+
+    setDescription(description: string) {
+        this.description = description;
         return this;
     }
 
@@ -171,7 +168,7 @@ export class WorkoutBuilder {
     }
 
     setLapStructure(lapstructure: Lapstructure[]) {
-        this.lap = lapstructure;
+        this.lapstructure = lapstructure;
         return this;
     }
 
@@ -179,14 +176,5 @@ export class WorkoutBuilder {
         return new Workout(this);
     }
 }
-
-class WorkoutPlan {
-    workouts: Workout[] = [];
-
-}
-
-let myWorkoutPlan: WorkoutPlan = {
-    workouts: [],
-};
 
 

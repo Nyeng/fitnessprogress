@@ -10,24 +10,46 @@ test('Create training plan', () => {
     workout.setCooldownKm(0.5);
 
     // Test workout properties
+    console.log(workout.name);
+    console.log(workout.cooldownMiles);
     expect(workout.name).toBe("Sunday long run");
     expect(workout.cooldownMiles).toBe(0.8045);
 });
 
-test('Six times six', () => {
-    const lap = new LapBuilder()
+test('Six times six + one sprint lap to test flexibility of workout planner ', () => {
+    const sixTimesSixLap = new LapBuilder()
         .setDurationSeconds((60 * 6))
         .setBreakInSeconds(60);
 
     // make this into one list in one line instead of the two lines below
+    const lapstructureSixTimesSix = new LapstructureBuilder()
+        .AddLapXTimes(sixTimesSixLap, 6)
+        .AddLap(new LapBuilder().setDurationSeconds(120).build())
+        .build()
 
-    const lapstructureSixTimesSix = new LapstructureBuilder(50).AddLapXTimes(lap, 6).build()
+    console.log(lapstructureSixTimesSix.durationSeconds)
+
     const lapStructures: Lapstructure[] = [];
     lapStructures.push(lapstructureSixTimesSix);
 
-    const workout = new WorkoutBuilder("Six times six minutes").setLapStructure(lapStructures).setType(WorkoutType.INTERVAL);
+    const workout = new WorkoutBuilder("Six times six minutes")
+        .setLapStructure(lapStructures)
+        .setType(WorkoutType.INTERVAL)
+        .setDescription("The best workout you can do if you handle thresholds")
+        .setWarmupKm(3)
+        .build();
 
+    // Test workout properties
+    // console.log(workout.name);
+    // console.log(workout.type);
+    // console.log(workout.description);
+    // console.log(workout.warmupKm);
 
+    console.log(workout)
+    console.log(workout.lapstructure?.[0].durationSeconds)
 });
+
+
+
 
 
