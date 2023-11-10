@@ -1,24 +1,188 @@
 export class Workout {
-
-    constructor(name: string, lap: Lap, warmupKm: number, warmupMiles: number = 0, cooldownKm: number, cooldownMiles: number = 0
-    ) {
-        this.name = name; this.lap = lap; this.warmupKm = warmupKm; this.warmupMiles = warmupMiles; this.cooldownKm = cooldownKm; this.cooldownMiles = cooldownMiles;
+    constructor(builder: WorkoutBuilder) {
+        this.name = builder.name;
+        this.lap = builder.lap;
+        this.type = builder.type;
+        this.warmupKm = builder.warmupKm;
+        this.warmupMiles = builder.warmupMiles;
+        this.cooldownKm = builder.cooldownKm;
+        this.cooldownMiles = builder.cooldownMiles;
     }
 
     name: string;
-    lap: Lap;
+    lap?: Lapstructure[];
+    type?: WorkoutType;
     warmupKm?: GLfloat;
     warmupMiles?: GLfloat;
     cooldownKm?: GLfloat;
     cooldownMiles?: GLfloat;
 }
 
-interface Lap {
+export class Lapstructure {
+    constructor(builder: LapstructureBuilder) {
+        this.durationSeconds = builder.durationSeconds ?? 0;
+        this.distance = builder.distance ?? 0;
+        this.breakInSeconds = builder.breakInSeconds;
+        this.breakInDistance = builder.breakInDistance;
+    }
 
+    durationSeconds: number;
+    distance: number;
+    breakInSeconds?: number;
+    breakInDistance?: number;
+}
+
+export class LapBuilder {
+    durationSeconds?: number;
+    breakInSeconds?: number;
+    distance?: number;
+    breakInDistance?: number;
+
+    setBreakInDistance(breakInDistance: number) {
+        this.breakInDistance = breakInDistance;
+        return this;
+    }
+
+    setDistance(distance: number) {
+        this.distance = distance;
+        return this;
+    }
+
+    setDurationSeconds(durationSeconds: number) {
+        this.durationSeconds = durationSeconds;
+        return this;
+    }
+
+    setBreakInSeconds(breakInSeconds: number) {
+        this.breakInSeconds = breakInSeconds;
+        return this;
+    }
+
+
+
+    build() {
+        return new Lap(this);
+    }
+}
+
+export class Lap {
+    constructor(builder: LapBuilder) {
+    }
+
+    durationSeconds?: number;
+    breakInSeconds?: number;
+    distance?: number;
+    breakInDistance?: number;
+}
+
+export class LapstructureBuilder {
+
+    durationSeconds?: number;
+    distance?: number;
+    breakInSeconds?: number;
+    breakInDistance?: number;
+    laps: Lap[] = [];
+
+    AddLaps(laps: Lap[]) {
+        laps = this.laps;
+        return this;
+    }
+
+    AddLap(lap: Lap) {
+        this.laps.push(lap);
+        return this;
+    }
+
+    AddLapXTimes(lap: Lap, times: number) {
+        for (let i = 0; i < times; i++) {
+            this.laps.push(lap);
+        }
+        return this;
+    }
+
+    constructor(durationSeconds: number) {
+        this.durationSeconds = durationSeconds;
+    }
+
+    setBreakInSeconds(breakInSeconds: number) {
+        this.breakInSeconds = breakInSeconds;
+        return this;
+    }
+
+    setBreakInDistance(breakInDistance: number) {
+        this.breakInDistance = breakInDistance;
+        return this;
+    }
+
+    build() {
+        return new Lapstructure(this);
+    }
+}
+
+
+
+export enum WorkoutType {
+    INTERVAL = 'interval',
+    LONG_RUN = 'long run',
+    RACE = 'race',
+}
+
+
+export class WorkoutBuilder {
+    name: string;
+    lap?: Lapstructure[];
+    type?: WorkoutType;
+    warmupKm?: GLfloat;
+    warmupMiles?: GLfloat;
+    cooldownKm?: GLfloat;
+    cooldownMiles?: GLfloat;
+    description?: string;
+
+    constructor(name: string) {
+        this.name = name;
+    }
+
+    setType(type: WorkoutType) {
+        this.type = type;
+        return this;
+    }
+
+    setWarmupKm(warmupKm: GLfloat) {
+        this.warmupKm = warmupKm;
+        return this;
+    }
+
+    setWarmupMiles(warmupMiles: GLfloat) {
+        this.warmupMiles = warmupMiles;
+        return this;
+    }
+
+    setCooldownKm(cooldownKm: GLfloat) {
+        this.cooldownKm = cooldownKm;
+        this.cooldownMiles = this.setCooldownMiles();
+        return this;
+    }
+
+    setCooldownMiles(): GLfloat {
+        if (this.cooldownKm != undefined) {
+            return this.cooldownKm * 1.609;
+        }
+        return 0;
+    }
+
+    setLapStructure(lapstructure: Lapstructure[]) {
+        this.lap = lapstructure;
+        return this;
+    }
+
+    build() {
+        return new Workout(this);
+    }
 }
 
 class WorkoutPlan {
     workouts: Workout[] = [];
+
 }
 
 let myWorkoutPlan: WorkoutPlan = {
