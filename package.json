@@ -1,5 +1,5 @@
 {
-  "name": "my-remix-app",
+  "name": "fitness-progress",
   "private": true,
   "sideEffects": false,
   "prisma": {
@@ -15,12 +15,9 @@
   },
   "dependencies": {
     "@prisma/client": "^5.5.2",
-    "@remix-run/css-bundle": "^2.0.0",
-    "@remix-run/node": "^2.0.0",
+    "@remix-run/node": "^2.2.0",
     "@remix-run/react": "^2.0.0",
     "@remix-run/serve": "^2.0.0",
-    "@vercel/analytics": "^1.0.2",
-    "@vercel/remix": "^2.0.0",
     "isbot": "^3.6.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

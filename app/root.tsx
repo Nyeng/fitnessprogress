@@ -6,7 +6,6 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import { Analytics } from "@vercel/analytics/react";
 import Menu from "./menu";
 import stylesheet from "~/tailwind.css";
 import { LinksFunction, LoaderFunction, redirect } from "@remix-run/node";
@@ -104,7 +103,6 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
-        <Analytics />
       </body>
     </html>
   );
