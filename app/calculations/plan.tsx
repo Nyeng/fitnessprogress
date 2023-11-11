@@ -1,180 +1,115 @@
-export class Workout {
-    constructor(builder: WorkoutBuilder) {
-        this.name = builder.name;
-        this.lapstructure = builder.lapstructure;
-        this.type = builder.type;
-        this.warmupKm = builder.warmupKm;
-        this.warmupMiles = builder.warmupMiles;
-        this.cooldownKm = builder.cooldownKm;
-        this.cooldownMiles = builder.cooldownMiles;
-        this.description = builder.description;
-    }
-
-    name: string;
-    lapstructure?: Lapstructure[];
-    type?: WorkoutType;
-    warmupKm?: GLfloat;
-    warmupMiles?: GLfloat;
-    cooldownKm?: GLfloat;
-    cooldownMiles?: GLfloat;
-    description?: string;
+export enum WorkoutType {
+    INTERVAL,
+    // ... other types as needed
 }
 
-export class Lapstructure {
-    constructor(builder: LapstructureBuilder) {
-        this.durationSeconds = builder.durationSeconds ?? 0;
-        this.distance = builder.distance ?? 0;
-        this.breakInSeconds = builder.breakInSeconds;
-        this.breakInDistance = builder.breakInDistance;
-    }
-
+class Lap {
     durationSeconds: number;
-    distance: number;
-    breakInSeconds?: number;
-    breakInDistance?: number;
+    breakInSeconds: number;
+
+    constructor(durationSeconds: number, breakInSeconds: number = 0) {
+        this.durationSeconds = durationSeconds;
+        this.breakInSeconds = breakInSeconds;
+    }
 }
 
 export class LapBuilder {
-    durationSeconds?: number;
-    breakInSeconds?: number;
-    distance?: number;
-    breakInDistance?: number;
+    private durationSeconds: number = 0;
+    private breakInSeconds: number = 0;
 
-    setBreakInDistance(breakInDistance: number) {
-        this.breakInDistance = breakInDistance;
+    setDurationSeconds(seconds: number): LapBuilder {
+        this.durationSeconds = seconds;
         return this;
     }
 
-    setDistance(distance: number) {
-        this.distance = distance;
+    setBreakInSeconds(seconds: number): LapBuilder {
+        this.breakInSeconds = seconds;
         return this;
     }
 
-    setDurationSeconds(durationSeconds: number) {
-        this.durationSeconds = durationSeconds;
-        return this;
-    }
-
-    setBreakInSeconds(breakInSeconds: number) {
-        this.breakInSeconds = breakInSeconds;
-        return this;
-    }
-
-    build() {
-        return new Lap(this);
+    build(): Lap {
+        return new Lap(this.durationSeconds, this.breakInSeconds);
     }
 }
 
-export class Lap {
-    constructor(builder: LapBuilder) {
-        this.durationSeconds = builder.durationSeconds;
-        this.breakInDistance = builder.breakInDistance;
-        this.distance = builder.distance;
-        this.breakInDistance = builder.breakInDistance;
-    }
+export class Lapstructure {
+    laps: Lap[] = [];
+    durationSeconds: number = 0;
 
-    durationSeconds?: number;
-    breakInSeconds?: number;
-    distance?: number;
-    breakInDistance?: number;
+    constructor(laps: Lap[]) {
+        this.laps = laps;
+        this.durationSeconds = laps.reduce((total, lap) => total + lap.durationSeconds, 0);
+    }
 }
 
 export class LapstructureBuilder {
-
     private laps: Lap[] = [];
 
-    AddLaps(laps: Lap[]) {
-        laps = this.laps;
+    AddLapXTimes(lap: Lap, times: number): LapstructureBuilder {
+        for (let i = 0; i < times; i++) {
+            this.laps.push(lap);
+        }
         return this;
     }
 
     AddLap(lap: Lap): LapstructureBuilder {
         this.laps.push(lap);
         return this;
-      }
+    }
 
-    // AddLapXTimes(lap: Lap, times: number) {
-    //     for (let i = 0; i < times; i++) {
-    //         this.laps.push(lap);
-    //     }
-    //     return this;
-    // }
-
-    AddLapXTimes(lapBuilder: LapBuilder, times: number): LapstructureBuilder {
-        for (let i = 0; i < times; i++) {
-          this.laps.push(lapBuilder.build());
-        }
-        return this;
-      }
-
-      build(): Lapstructure {
-        return new Lapstructure(this);
-      }
+    build(): Lapstructure {
+        return new Lapstructure(this.laps);
+    }
 }
 
+export class Workout {
+    name: string;
+    lapStructure: Lapstructure[];
+    type: WorkoutType;
+    description: string;
+    warmupKm: number;
 
-
-export enum WorkoutType {
-    INTERVAL = 'interval',
-    LONG_RUN = 'long run',
-    RACE = 'race',
+    constructor(name: string, lapStructure: Lapstructure[], type: WorkoutType, description: string, warmupKm: number = 0) {
+        this.name = name;
+        this.lapStructure = lapStructure;
+        this.type = type;
+        this.description = description;
+        this.warmupKm = warmupKm;
+    }
 }
 
 export class WorkoutBuilder {
-    name: string;
-    lapstructure?: Lapstructure[];
-    type?: WorkoutType;
-    warmupKm?: GLfloat;
-    warmupMiles?: GLfloat;
-    cooldownKm?: GLfloat;
-    cooldownMiles?: GLfloat;
-    description?: string;
+    private name: string;
+    private lapStructure: Lapstructure[] = [];
+    private type: WorkoutType = WorkoutType.INTERVAL;
+    private description: string = '';
+    private warmupKm: number = 0;
 
     constructor(name: string) {
         this.name = name;
     }
 
-    setType(type: WorkoutType) {
+    setLapStructure(lapStructure: Lapstructure[]): WorkoutBuilder {
+        this.lapStructure = lapStructure;
+        return this;
+    }
+
+    setType(type: WorkoutType): WorkoutBuilder {
         this.type = type;
         return this;
     }
 
-    setDescription(description: string) {
+    setDescription(description: string): WorkoutBuilder {
         this.description = description;
         return this;
     }
 
-    setWarmupKm(warmupKm: GLfloat) {
-        this.warmupKm = warmupKm;
+    setWarmupKm(km: number): WorkoutBuilder {
+        this.warmupKm = km;
         return this;
     }
 
-    setWarmupMiles(warmupMiles: GLfloat) {
-        this.warmupMiles = warmupMiles;
-        return this;
-    }
-
-    setCooldownKm(cooldownKm: GLfloat) {
-        this.cooldownKm = cooldownKm;
-        this.cooldownMiles = this.setCooldownMiles();
-        return this;
-    }
-
-    setCooldownMiles(): GLfloat {
-        if (this.cooldownKm != undefined) {
-            return this.cooldownKm * 1.609;
-        }
-        return 0;
-    }
-
-    setLapStructure(lapstructure: Lapstructure[]) {
-        this.lapstructure = lapstructure;
-        return this;
-    }
-
-    build() {
-        return new Workout(this);
+    build(): Workout {
+        return new Workout(this.name, this.lapStructure, this.type, this.description, this.warmupKm);
     }
 }
-
-
