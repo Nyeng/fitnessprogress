@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { LapBuilder, Lapstructure, LapstructureBuilder, WorkoutBuilder, WorkoutType } from "../calculations/plan";
+import { Lap, Lapstructure, LapstructureBuilder, WorkoutBuilder, WorkoutType } from "../calculations/plan";
 
 
 test('Create training plan', () => {
@@ -9,33 +9,26 @@ test('Create training plan', () => {
 });
 
 test('Six times six + one sprint lap to test flexibility of workout planner ', () => {
-    const sixTimesSixLap = new LapBuilder()
-        .setDurationSeconds((60 * 6))
-        .setBreakInSeconds(60).build();
-
-    // make this into one list in one line instead of the two lines below
+    // Example usage
+    const sixTimesSixLap = new Lap(60 * 6, 60);
     const lapstructureSixTimesSix = new LapstructureBuilder()
-        .AddLapXTimes(sixTimesSixLap, 6)
-        .AddLap(new LapBuilder().setDurationSeconds(120).build())
-        .build()
+        .addLap(sixTimesSixLap, 6)
+        .addLap(new Lap(120))
+        .addLap(new Lap(60, 20))
+        .build();
 
-        console.log(lapstructureSixTimesSix)
+    console.log(lapstructureSixTimesSix.durationSeconds); // Output the total duration in seconds
 
-
-    console.log(lapstructureSixTimesSix.durationSeconds)
-
-    const lapStructures: Lapstructure[] = [];
-    lapStructures.push(lapstructureSixTimesSix);
+    const lapStructures: Lapstructure[] = [lapstructureSixTimesSix];
 
     const workout = new WorkoutBuilder("Six times six minutes")
-        .setDescription("The best workout you can do if you handle thresholds")
         .setLapStructure(lapStructures)
         .setType(WorkoutType.INTERVAL)
+        .setDescription("The best workout you can do if you handle thresholds")
         .setWarmupKm(3)
         .build();
 
-
-    console.log(workout)
+    console.log(workout); // Output the workout details
 });
 
 
