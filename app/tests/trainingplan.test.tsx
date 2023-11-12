@@ -1,34 +1,28 @@
 import { expect, test } from 'vitest'
-import { Lap, Lapstructure, LapstructureBuilder, WorkoutBuilder, WorkoutType } from "../calculations/plan";
+import { Lap, LapBuilder, WorkoutBuilder, WorkoutType } from "../calculations/plan";
 
 
-test('Create training plan', () => {
-    // Create workout
-    const workout = new WorkoutBuilder("Sunday long run");
+test('Test lap time based interval - 6 x 6 minutes', () => {
 
-});
+    // create an instance of Laps[] here and add the ones below
+    const soloSprint =
+        new LapBuilder().setLapSeconds(15).setLapBreakInSeconds(60).setLapDescription("Just a litle sprint to get things started").build()
 
-test('Six times six + one sprint lap to test flexibility of workout planner ', () => {
-    // Example usage
-    const sixTimesSixLap = new Lap(60 * 6, 60);
-    const lapstructureSixTimesSix = new LapstructureBuilder()
-        .addLap(sixTimesSixLap, 6)
-        .addLap(new Lap(120))
-        .addLap(new Lap(60, 20))
-        .build();
-
-    console.log(lapstructureSixTimesSix.durationSeconds); // Output the total duration in seconds
-
-    const lapStructures: Lapstructure[] = [lapstructureSixTimesSix];
+    const sixTimesSix = new LapBuilder()
+        .setLapDescription("Six times six minutes")
+        .setLapBreakInSeconds(60)
+        .setLapSeconds(60 * 6)
+        .build()
 
     const workout = new WorkoutBuilder("Six times six minutes")
-        .setLapStructure(lapStructures)
         .setType(WorkoutType.INTERVAL)
+        .setLap(soloSprint)
+        .setRepeatedLaps(sixTimesSix, 6)
         .setDescription("The best workout you can do if you handle thresholds")
         .setWarmupKm(3)
         .build();
 
-    console.log(workout); // Output the workout details
+    console.log(workout.toString()); // Output the workout details
 });
 
 
