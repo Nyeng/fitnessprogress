@@ -10,15 +10,15 @@ export default function Menu() {
     const authorizationUrl = `https://www.strava.com/oauth/authorize?client_id=${loaderData.client_id}&response_type=code&redirect_uri=${base_url}/callback&approval_prompt=auto&scope=read_all,activity:read_all`;
 
     return (
-        <div className="flex bg-black">
+        <div className="flex bg-black m-0 p-5 rounded-none">
             <nav className="bg-black">
-                <Link to="/" className="ml-auto text-2xl font-bold text-orange-300 border-white">
+                <Link to="/" className="ml-auto text-2xl font-bold text-orange-300 border-white pr-4 hover:text-white">
                     Fitprog
                 </Link>
-                <Link to="/training/" prefetch="render">
+                <Link to="/training/" className="text-lg pr-3 font-sans" prefetch="render">
                     Training
                 </Link>
-                <Link to="/workouts">
+                <Link to="/workouts" className="text-lg pr-3 font-sans">
                     Workouts
                 </Link>
                 <LoginButton name={loaderData.username} isLoggedIn={loaderData.username != undefined} />
@@ -27,10 +27,10 @@ export default function Menu() {
     );
 
 
-            
+
     function LoginButton({ name, isLoggedIn }: { name: string, isLoggedIn: boolean }): JSX.Element {
         if (isLoggedIn) {
-            return <Link to={"/logout"}>{name} - Logout</Link>
+            return <Link className="text-lg font-sans" to={"/logout"}>{name} - Logout</Link>
         } else {
             return <Link to={authorizationUrl} >
                 <img src={strava_image} className="ml-2 h-12 w-48" alt="Connect with strava" />

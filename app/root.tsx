@@ -6,13 +6,13 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import { Analytics } from "@vercel/analytics/react";
 import Menu from "./menu";
 import stylesheet from "~/tailwind.css";
 import { LinksFunction, LoaderFunction, redirect } from "@remix-run/node";
 import { createElement } from "react";
 import { commitSession, getSession } from "./authhandling/sessions";
 import { isTokenExpired, refreshAccessToken } from "./authhandling/TokenHandler";
+import { PendingNavigation } from "./performance/utility";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -99,12 +99,11 @@ export default function App() {
       </head>
       <body>
         <Menu />
-
+        <PendingNavigation />
         <Outlet />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
-        <Analytics />
       </body>
     </html>
   );

@@ -14,8 +14,11 @@ The website is about creating a Workout plan for runners that allow them to trac
 # Ideer
 - Click and drag: https://codesandbox.io/p/sandbox/remix-dnd-ezel1d
 
-# Connect to database
+# Database
  `npx prisma studio` - IDE to view data (must have schema set up)
+ `npx prisma generate` - Generate prisma client and schema
+ `npx prisma migrate dev` - Migrate and update(?) schema
+ ` npx prisma migrate reset` Slette data i dev ved behov - NOTE - don't do this when you start actually using the whole thing, then you must migrate
 
 # Remix
 This directory is a brief example of a [Remix](https://remix.run/docs) site that can be deployed to Vercel with zero configuration.

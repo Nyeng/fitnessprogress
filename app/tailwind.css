@@ -7,8 +7,9 @@
     h2 {
         @apply text-lg font-mono;
     }
+
     div {
-        @apply rounded-lg shadow-lg shadow-indigo-500/40 p-4 m-4 font-serif text-sm;
+        @apply rounded-lg p-2 m-4 font-serif text-lg;
     }
 
     nav a {
@@ -16,7 +17,7 @@
     }
 
     nav a:hover {
-        @apply underline;
+        @apply text-orange-300;
     }
 
     table {
@@ -30,4 +31,9 @@
     td {
         @apply border border-gray-400 p-2 text-gray-700;
     }
+
+    p {
+        @apply py-2;
+    }
+
 }

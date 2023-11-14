@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL") 
+  url      = env("POSTGRES_PRISMA_URL")
 }
 
 //Todo: Need to refactor and migrate this schema and add this field to the schebang: expires_at (epoch, convert to datetime or sum')
@@ -18,4 +18,39 @@ model User {
   name         String?
   accessToken  String?
   refreshToken String?
+}
+
+enum WorkoutType {
+    INTERVAL
+    RACE
+    LONG_RUN
+}
+
+model Lap {
+    id                Int          @id @default(autoincrement())
+    lapSeconds        Int?
+    lapDistance       Int?
+    lapBreakInSeconds Int?
+    lapDescription    String
+    workouts          WorkoutLap[] // Relation to WorkoutLap for many-to-many
+}
+
+model WorkoutLap {
+    lap       Lap      @relation(fields: [lapId], references: [id])
+    lapId     Int
+    workout   Workout  @relation(fields: [workoutId], references: [id])
+    workoutId Int
+    repeats   Int      // Number of times the lap is repeated in this workout
+
+    @@id([lapId, workoutId])
+}
+
+model Workout {
+    id          Int           @id @default(autoincrement())
+    name        String
+    type        WorkoutType?  // Optional: Type of the workout
+    description String        // Description of the workout
+    warmupKm    Int?          // Optional: Warmup distance in kilometers
+    cooldownKm  Int?          // Optional: Cooldown distance in kilometers
+    workoutLaps WorkoutLap[]  // Relation to WorkoutLap for many-to-many
 }
