@@ -1,6 +1,6 @@
 import { Lap, Workout, WorkoutLap } from "@prisma/client";
 import { LoaderFunction, json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import prisma from "prisma/client";
 import { useState } from "react";
 
@@ -8,7 +8,6 @@ interface WorkoutWithLaps extends Workout {
     workoutLaps: (WorkoutLap & { lap: Lap })[];
 }
 
-// Todo: show custom workouts for users
 export const loader: LoaderFunction = async () => {
     const workouts = await prisma.workout.findMany({
         include: {
@@ -31,6 +30,8 @@ export default function Training() {
     return (
         <>
             <div>
+                {/* <Outlet></Outlet> */}
+
                 <Link to="/add-workout" className="text-gray-700 hover:text-gray-900">
                     Add Workout
                 </Link>

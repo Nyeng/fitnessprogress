@@ -1,17 +1,10 @@
 import { MetaFunction, json } from "@remix-run/node";
-import { getWorkouts } from "~/data/workouts";
 
 export const meta: MetaFunction = () => {
   return [
     { title: "Fitness progress" },
     { name: "description", content: "My current training program!" },
   ];
-};
-
-export const loader = async () => {
-  const workouts = await getWorkouts();
-  var data = json({ workouts });
-  return data
 };
 
 /**

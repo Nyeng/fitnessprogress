@@ -1,5 +1,6 @@
 import { WorkoutType } from "@prisma/client";
 import { ActionFunction, redirect } from "@remix-run/node";
+import { Form } from "@remix-run/react";
 import prisma from "prisma/client";
 import { useState } from "react";
 
@@ -66,10 +67,7 @@ export const action: ActionFunction = async ({ request }) => {
             }
         },
     });
-
-    return redirect(`/workouts/${workout.id}`);
-
-
+    return redirect(`/workout/${workout.id}`);
 };
 
 const WorkoutForm: React.FC = () => {
@@ -84,9 +82,8 @@ const WorkoutForm: React.FC = () => {
         setLaps(laps.filter((_, i) => i !== index));
     };
 
-
     return (
-        <form method="post">
+        <Form method="post">
             <div>
                 <label htmlFor="name">Workout Name:</label>
                 <input type="text" id="name" name="name" required />
@@ -127,13 +124,12 @@ const WorkoutForm: React.FC = () => {
                     <input type="number" name={`lapBreakInSeconds${lap.id}`} placeholder="Lap break (seconds)" />
                     <input type="number" name={`repeats${lap.id}`} placeholder="Repeats" />
                     <button type="button" onClick={() => removeLap(index)}>Remove Lap</button>
-
                 </fieldset>
             ))}
 
             <button type="button" onClick={addLap}>Add Another Lap</button>
             <button type="submit">Create Workout</button>
-        </form>
+        </Form>
     );
 };
 
