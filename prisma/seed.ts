@@ -1,34 +1,40 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, WorkoutType } from '@prisma/client';
 
-const seedData = [
-    {
-        userId: 2,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        name: "AnnaTest",
-        accessToken: "adsløkasdla",
-        refreshToken: "adsadsasaks"
-    }
-];
+const prisma = new PrismaClient();
 
-async function seed() {
-    const prisma = new PrismaClient();
-
-    try {
-        for (const user of seedData) {
-            await prisma.user.create({
-                data: {
-                    ...user,
-                    createdAt: new Date(user.createdAt),
-                    updatedAt: new Date(user.updatedAt)
-                }
-            });
+async function main() {
+    // Create unique laps
+    const sixMinuteLap = await prisma.lap.create({
+        data: {
+            lapSeconds: 360,
+            lapBreakInSeconds: 60,
+            lapDescription: "6 minute repeats"
         }
-    } catch (error) {
-        console.error("Error seeding data:", error);
-    } finally {
-        await prisma.$disconnect();
-    }
-}
+    });
 
-seed();
+    // Create a workout with repeated laps
+    const workout = await prisma.workout.create({
+        data: {
+            name: "Six times six minutes interval session",
+            type: WorkoutType.INTERVAL,
+            description: "Threshold session, keep it steady pace and don't goo too hard, or else you'll struggle.",
+            warmupKm: 3,
+            workoutLaps: {
+                create: {
+                    lapId: sixMinuteLap.id,
+                    repeats: 6  // Repeating the six-minute lap 6 times
+                }
+            }
+        }
+    });
+
+    console.log(`Created workout with ID: ${workout.id}`);
+}
+main()
+    .catch(e => {
+        console.error(e);
+        throw e;
+    })
+    .finally(async () => {
+        await prisma.$disconnect();
+    });

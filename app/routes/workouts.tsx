@@ -1,39 +1,81 @@
+import { Lap, Workout, WorkoutLap } from "@prisma/client";
 import { LoaderFunction, json } from "@remix-run/node";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
-import { getWorkouts } from "~/data/workouts";
-import { Workout } from "~/domain/workout";
+import prisma from "prisma/client";
 import { useState } from "react";
 
-export const loader: LoaderFunction = async ({ request }) => {
+interface WorkoutWithLaps extends Workout {
+    workoutLaps: (WorkoutLap & { lap: Lap })[];
+}
 
-    const workouts = await getWorkouts();
+export const loader: LoaderFunction = async ({ request }) => {
+    const workouts = await prisma.workout.findMany({
+        include: {
+            workoutLaps: {
+                include: {
+                    lap: true,
+                },
+            },
+        },
+    });
+
     var data = json({ workouts });
     return data
 };
 
 export default function Training() {
-    const { workouts } = useLoaderData<{ workouts: Workout[] }>();
+    const { workouts } = useLoaderData<{ workouts: WorkoutWithLaps[] }>();
+    const [clickedWorkoutId, setClickedWorkoutId] = useState<number | null>(null);
 
     return (
-        <>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {workouts.map((workout) => (
+                <div
+                    key={workout.id}
+                    className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110"
+                >
+                    <div
+                        onClick={() => setClickedWorkoutId((prev) => (prev === workout.id ? null : workout.id))}
+                        className="bg-white rounded-lg shadow-none p-6 hover:bg-gray-100 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 cursor-pointer"
+                    >
+                        <h2 className="text-gray-900 font-bold text-lg mb-2">{workout.name}</h2>
+                        <p className="text-gray-700 text-base">{workout.description}</p>
+                    </div>
+                    {clickedWorkoutId === workout.id && (
+                        <>
+                            <p className="text-gray-700 text-base">Type: {workout.type}</p>
+                            <p className="text-gray-700 text-base">Warmup {workout.warmupKm} km</p>
+                            <p className="text-gray-700 text-base">Cooldown distance: {workout.cooldownKm} km</p>
+                            <h3 className="text-gray-900 font-bold text-base mb-2">Laps</h3>
+                            <ul>
+                                {workout.workoutLaps.map((workoutLap) => (
+                                    <li key={`${workout.id}-${workoutLap.lapId}`}>
+                                        <div
+                                            key={workout.id - workoutLap.lapId}
+                                            className="bg-gray-100 rounded-lg shadow-md p-4 mt-4"
+                                        >
+                                            <p className="text-gray-900 font-bold text-base mb-2">
+                                                {workoutLap.lap.lapDescription}
+                                            </p>
+                                            <p className="text-gray-700 text-base">Repeats: {workoutLap.repeats}</p>
+                                            <p className="text-gray-700 text-base">
+                                                Break: {workoutLap.lap.lapBreakInSeconds}
+                                            </p>
+                                            <p className="text-gray-700 text-base">
+                                                Minutes{" "}
+                                                {workoutLap.lap.lapSeconds ? workoutLap.lap.lapSeconds / 60 : 0}{" "}
+                                            </p>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </>
+                    )}
+                </div>
+            ))}
             <div>
-                <table>
-                    <tr>
-                        <th>Workout Name</th>
-                        <th>Workout Type</th>
-                    </tr>
-
-                    {workouts.map((workout) => (
-                        <tr>
-
-                            <td><Link to={workout.id}>{workout.name} </Link></td>
-                            <td>{workout.type}</td>
-                        </tr>
-                    ))}
-                </table>
-                <Outlet />
-            </div >
-
-        </>
+                <Link to="#">Link</Link>
+            </div>
+        </div>
     );
 }

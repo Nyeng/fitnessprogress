@@ -20,7 +20,7 @@ export class LapBuilder {
     private lapBreakInSeconds: number = 0;
     private lapDescription: string = ""
 
-    setLapDescription(description: string) : LapBuilder {
+    setLapDescription(description: string): LapBuilder {
         this.lapDescription = description;
         return this;
     }
@@ -51,6 +51,7 @@ export class Workout {
         public type: WorkoutType,
         public description: string,
         public warmupKm: number,
+        public cooldownKm: number,
         public laps: Lap[]
     ) { }
 
@@ -70,6 +71,7 @@ export class WorkoutBuilder {
     private type: WorkoutType = WorkoutType.INTERVAL;
     private description: string = '';
     private warmupKm: number = 0;
+    private cooldownKm: number = 0;
     private laps: Lap[] = [];
 
     constructor(private name: string) { }
@@ -91,6 +93,11 @@ export class WorkoutBuilder {
         return this;
     }
 
+    setCooldown(cooldown: number): WorkoutBuilder {
+        this.cooldownKm = cooldown;
+        return this;
+    }
+
     setDescription(description: string): WorkoutBuilder {
         this.description = description;
         return this;
@@ -102,6 +109,6 @@ export class WorkoutBuilder {
     }
 
     build(): Workout {
-        return new Workout(this.name, this.type, this.description, this.warmupKm, this.laps);
+        return new Workout(this.name, this.type, this.description, this.warmupKm, this.cooldownKm, this.laps);
     }
 }

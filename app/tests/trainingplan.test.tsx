@@ -4,7 +4,6 @@ import { Lap, LapBuilder, WorkoutBuilder, WorkoutType } from "../calculations/pl
 
 test('Test lap time based interval - 6 x 6 minutes', () => {
 
-    // create an instance of Laps[] here and add the ones below
     const soloSprint =
         new LapBuilder().setLapSeconds(15).setLapBreakInSeconds(60).setLapDescription("Just a litle sprint to get things started").build()
 
@@ -16,8 +15,8 @@ test('Test lap time based interval - 6 x 6 minutes', () => {
 
     const workout = new WorkoutBuilder("Six times six minutes")
         .setType(WorkoutType.INTERVAL)
-        .setLap(soloSprint)
         .setRepeatedLaps(sixTimesSix, 6)
+        .setLap(soloSprint)
         .setDescription("The best workout you can do if you handle thresholds")
         .setWarmupKm(3)
         .build();
