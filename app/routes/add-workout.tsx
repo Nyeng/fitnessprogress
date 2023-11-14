@@ -1,6 +1,6 @@
 import { WorkoutType } from "@prisma/client";
 import { ActionFunction, redirect } from "@remix-run/node";
-import { Form } from "@remix-run/react";
+import { Form, useNavigation } from "@remix-run/react";
 import prisma from "prisma/client";
 import { useState } from "react";
 
@@ -71,7 +71,6 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 const WorkoutForm: React.FC = () => {
-
     const [laps, setLaps] = useState([{ id: 1 }]);
 
     const addLap = () => {

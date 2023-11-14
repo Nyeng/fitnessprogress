@@ -3,6 +3,7 @@ import { LoaderFunction, json } from "@remix-run/node";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import prisma from "prisma/client";
 import { useState } from "react";
+import { useNavigation } from "@remix-run/react";
 
 interface WorkoutWithLaps extends Workout {
     workoutLaps: (WorkoutLap & { lap: Lap })[];
@@ -31,7 +32,6 @@ export default function Training() {
         <>
             <div>
                 {/* <Outlet></Outlet> */}
-
                 <Link to="/add-workout" className="text-gray-700 hover:text-gray-900">
                     Add Workout
                 </Link>

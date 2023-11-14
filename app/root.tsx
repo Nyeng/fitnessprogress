@@ -12,6 +12,7 @@ import { LinksFunction, LoaderFunction, redirect } from "@remix-run/node";
 import { createElement } from "react";
 import { commitSession, getSession } from "./authhandling/sessions";
 import { isTokenExpired, refreshAccessToken } from "./authhandling/TokenHandler";
+import { PendingNavigation } from "./performance/utility";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -98,7 +99,7 @@ export default function App() {
       </head>
       <body>
         <Menu />
-
+        <PendingNavigation />
         <Outlet />
         <ScrollRestoration />
         <Scripts />
