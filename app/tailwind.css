@@ -9,7 +9,7 @@
     }
 
     div {
-        @apply rounded-lg shadow-lg p-4 m-4 font-serif text-lg ;
+        @apply rounded-lg p-2 m-4 font-serif text-lg;
     }
 
     nav a {

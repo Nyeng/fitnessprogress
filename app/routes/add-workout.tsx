@@ -13,7 +13,6 @@ interface LapData {
 
 export const action: ActionFunction = async ({ request }) => {
 
-
     const formData = await request.formData();
     const name = formData.get("name") as string;
     const type = formData.get("type") as WorkoutType;
@@ -28,13 +27,13 @@ export const action: ActionFunction = async ({ request }) => {
         const lapDistance = formData.get(`lapDistance${i}`) as string;
         const lapBreakInSeconds = formData.get(`lapBreakInSeconds${i}`) as string;
         const repeats = formData.get(`repeats${i}`) as string;
-    
+
         lapsData.push({
             lapDescription,
             lapSeconds: lapSeconds ? Number(lapSeconds) : null,
             lapDistance: lapDistance ? Number(lapDistance) : null,
             lapBreakInSeconds: lapBreakInSeconds ? Number(lapBreakInSeconds) : null,
-            repeats: repeats ? Number(repeats) : 1
+            repeats: Number(repeats)
         });
     }
     // Create Laps first
@@ -62,7 +61,7 @@ export const action: ActionFunction = async ({ request }) => {
             workoutLaps: {
                 create: createdLaps.map((createdLap, index) => ({
                     lapId: createdLap.id,
-                    repeats: lapsData[index].repeats
+                    repeats: lapsData[index].repeats,
                 }))
             }
         },
@@ -81,9 +80,8 @@ const WorkoutForm: React.FC = () => {
         setLaps([...laps, { id: laps.length + 1 }]);
     };
 
-    // 
-    const removeLap = () => {
-        setLaps(laps.slice(0, -1));
+    const removeLap = (index: number) => {
+        setLaps(laps.filter((_, i) => i !== index));
     };
 
 
@@ -124,17 +122,16 @@ const WorkoutForm: React.FC = () => {
                     <legend>Lap {index + 1}</legend>
                     {/* Lap fields with index in the name */}
                     <input type="text" name={`lapDescription${lap.id}`} placeholder="Lap Description" />
-                    <input type="number" name={`lapSeconds${lap.id}`} placeholder="Duration (Seconds)" />
-                    <input type="number" name={`Repeats${lap.id}`} placeholder="Repeats" />
+                    <input type="number" name={`lapSeconds${lap.id}`} placeholder="Duration (seconds)" />
+                    <input type="number" name={`lapDistance${lap.id}`} placeholder="Distance (meters)" />
+                    <input type="number" name={`lapBreakInSeconds${lap.id}`} placeholder="Lap break (seconds)" />
+                    <input type="number" name={`repeats${lap.id}`} placeholder="Repeats" />
+                    <button type="button" onClick={() => removeLap(index)}>Remove Lap</button>
 
-                    {/* ... other lap fields ... */}
                 </fieldset>
             ))}
 
             <button type="button" onClick={addLap}>Add Another Lap</button>
-            <button type="button" onClick={removeLap}>Remove Lap</button>
-            <button type="submit">Create Workout</button>
-
             <button type="submit">Create Workout</button>
         </form>
     );
