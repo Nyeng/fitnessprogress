@@ -1,8 +1,19 @@
 import { WorkoutType } from "@prisma/client";
 import { ActionFunction, redirect } from "@remix-run/node";
 import prisma from "prisma/client";
+import { useState } from "react";
+
+interface LapData {
+    lapDescription: string;
+    lapSeconds: number | null;
+    lapDistance: number | null;
+    lapBreakInSeconds: number | null;
+    repeats: number;
+}
 
 export const action: ActionFunction = async ({ request }) => {
+
+
     const formData = await request.formData();
     const name = formData.get("name") as string;
     const type = formData.get("type") as WorkoutType;
@@ -10,9 +21,37 @@ export const action: ActionFunction = async ({ request }) => {
     const warmupKm = formData.get("warmupKm") as string;
     const cooldownKm = formData.get("cooldownKm") as string;
 
-    // Validate the data here...
+    let lapsData: LapData[] = [];
+    for (let i = 1; formData.has(`lapDescription${i}`); i++) {
+        const lapDescription = formData.get(`lapDescription${i}`) as string;
+        const lapSeconds = formData.get(`lapSeconds${i}`) as string;
+        const lapDistance = formData.get(`lapDistance${i}`) as string;
+        const lapBreakInSeconds = formData.get(`lapBreakInSeconds${i}`) as string;
+        const repeats = formData.get(`repeats${i}`) as string;
+    
+        lapsData.push({
+            lapDescription,
+            lapSeconds: lapSeconds ? Number(lapSeconds) : null,
+            lapDistance: lapDistance ? Number(lapDistance) : null,
+            lapBreakInSeconds: lapBreakInSeconds ? Number(lapBreakInSeconds) : null,
+            repeats: repeats ? Number(repeats) : 1
+        });
+    }
+    // Create Laps first
+    const createdLaps = await Promise.all(
+        lapsData.map(lap =>
+            prisma.lap.create({
+                data: {
+                    lapSeconds: lap.lapSeconds,
+                    lapDistance: lap.lapDistance,
+                    lapBreakInSeconds: lap.lapBreakInSeconds,
+                    lapDescription: lap.lapDescription
+                }
+            })
+        )
+    );
 
-    // Create a new workout in the database
+    // Create the workout with associated workoutLaps
     const workout = await prisma.workout.create({
         data: {
             name,
@@ -20,14 +59,34 @@ export const action: ActionFunction = async ({ request }) => {
             description,
             warmupKm: warmupKm ? Number(warmupKm) : null,
             cooldownKm: cooldownKm ? Number(cooldownKm) : null,
-            // Add laps data here
+            workoutLaps: {
+                create: createdLaps.map((createdLap, index) => ({
+                    lapId: createdLap.id,
+                    repeats: lapsData[index].repeats
+                }))
+            }
         },
     });
 
     return redirect(`/workouts/${workout.id}`);
+
+
 };
 
 const WorkoutForm: React.FC = () => {
+
+    const [laps, setLaps] = useState([{ id: 1 }]);
+
+    const addLap = () => {
+        setLaps([...laps, { id: laps.length + 1 }]);
+    };
+
+    // 
+    const removeLap = () => {
+        setLaps(laps.slice(0, -1));
+    };
+
+
     return (
         <form method="post">
             <div>
@@ -60,37 +119,26 @@ const WorkoutForm: React.FC = () => {
                 <input type="number" id="cooldownKm" name="cooldownKm" />
             </div>
 
-            {/* Dynamic Laps Inputs - Example with one lap for simplicity */}
-            <fieldset>
-                <legend>Lap Details</legend>
-                <div>
-                    <label htmlFor="lapDescription">Lap Description:</label>
-                    <input type="text" id="lapDescription" name="lapDescription" />
-                </div>
-                <div>
-                    <label htmlFor="lapSeconds">Lap Duration (Seconds):</label>
-                    <input type="number" id="lapSeconds" name="lapSeconds" />
-                </div>
-                <div>
-                    <label htmlFor="lapDistance">Lap Distance:</label>
-                    <input type="number" id="lapDistance" name="lapDistance" />
-                </div>
-                <div>
-                    <label htmlFor="lapBreakInSeconds">Break Time (Seconds):</label>
-                    <input type="number" id="lapBreakInSeconds" name="lapBreakInSeconds" />
-                </div>
-                <div>
-                    <label htmlFor="repeats">Number of Repeats:</label>
-                    <input type="number" id="repeats" name="repeats" />
-                </div>
-            </fieldset>
+            {laps.map((lap, index) => (
+                <fieldset key={lap.id}>
+                    <legend>Lap {index + 1}</legend>
+                    {/* Lap fields with index in the name */}
+                    <input type="text" name={`lapDescription${lap.id}`} placeholder="Lap Description" />
+                    <input type="number" name={`lapSeconds${lap.id}`} placeholder="Duration (Seconds)" />
+                    <input type="number" name={`Repeats${lap.id}`} placeholder="Repeats" />
+
+                    {/* ... other lap fields ... */}
+                </fieldset>
+            ))}
+
+            <button type="button" onClick={addLap}>Add Another Lap</button>
+            <button type="button" onClick={removeLap}>Remove Lap</button>
+            <button type="submit">Create Workout</button>
 
             <button type="submit">Create Workout</button>
         </form>
     );
 };
 
-
 export default WorkoutForm;
-
 
