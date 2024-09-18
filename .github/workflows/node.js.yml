@@ -33,3 +33,5 @@ jobs:
       - name: Inject Secrets
         run: |
           echo "Test secret: $TEST_SECRET"
+        env:
+          TEST_SECRET: ${{ secrets.TEST_SECRET }}
